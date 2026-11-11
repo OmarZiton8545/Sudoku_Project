@@ -1,0 +1,62 @@
+{
+  "base_seed": 42,
+  "puzzles_per_level": 100,
+  "num_givens": 30,
+  "levels": {
+    "0": {
+      "k": 0,
+      "generator_seed": 42,
+      "num_puzzles": 100,
+      "exact_k_count": 100,
+      "exact_k_rate": 1.0,
+      "mean_wrong_cells": 0.0,
+      "min_wrong_cells": 0,
+      "max_wrong_cells": 0,
+      "blank_detection_errors": 0
+    },
+    "1": {
+      "k": 1,
+      "generator_seed": 1042,
+      "num_puzzles": 100,
+      "exact_k_count": 100,
+      "exact_k_rate": 1.0,
+      "mean_wrong_cells": 1.0,
+      "min_wrong_cells": 1,
+      "max_wrong_cells": 1,
+      "blank_detection_errors": 0
+    },
+    "2": {
+      "k": 2,
+      "generator_seed": 2042,
+      "num_puzzles": 100,
+      "exact_k_count": 100,
+      "exact_k_rate": 1.0,
+      "mean_wrong_cells": 2.0,
+      "min_wrong_cells": 2,
+      "max_wrong_cells": 2,
+      "blank_detection_errors": 0
+    },
+    "3": {
+      "k": 3,
+      "generator_seed": 3042,
+      "num_puzzles": 100,
+      "exact_k_count": 100,
+      "exact_k_rate": 1.0,
+      "mean_wrong_cells": 3.0,
+      "min_wrong_cells": 3,
+      "max_wrong_cells": 3,
+      "blank_detection_errors": 0
+    },
+    "4": {
+      "k": 4,
+      "generator_seed": 4042,
+      "num_puzzles": 100,
+      "exact_k_count": 100,
+      "exact_k_rate": 1.0,
+      "mean_wrong_cells": 4.0,
+      "min_wrong_cells": 4,
+      "max_wrong_cells": 4,
+      "blank_detection_errors": 0
+    }
+  }
+}

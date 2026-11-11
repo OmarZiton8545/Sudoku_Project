@@ -129,8 +129,9 @@ def build_hard_digit_pools(
         misread_sorted = misread[np.argsort(-true_probs)]
         hard_misread[d] = misread_sorted
 
-        # Fallback low-confidence pool sorted by smallest margin / top confidence.
-        low_sorted = indices_d[np.argsort(top_conf[indices_d])]
+        # Fallback low-confidence pool sorted by highest second-best probability.
+        second_best = np.sort(probs[indices_d], axis=1)[:, -2]
+        low_sorted = indices_d[np.argsort(-second_best)]
         low_confidence[d] = low_sorted[: max(10, len(low_sorted) // 10)]
 
     return DigitPools(
@@ -157,15 +158,15 @@ def build_mosaic(
     chosen_idx = rng.choice(len(given_coords), size=num_misreads, replace=False)
     misread_set = {given_coords[i] for i in chosen_idx}
 
+    used_hard: set[int] = set()
     mosaic = np.zeros((9, 9, 28, 28), dtype=np.float32)
     for r, c in given_coords:
         digit = int(puzzle[r, c])
         if (r, c) in misread_set:
-            hard_pool = pools.hard_misread[digit]
-            if len(hard_pool) > 0:
-                # Sample from the top half of plausible misreads so true digit stays in top-k.
-                cap = max(1, min(len(hard_pool), 40))
-                img_idx = int(hard_pool[int(rng.integers(0, cap))])
+            avail_hard = [int(i) for i in pools.hard_misread[digit] if int(i) not in used_hard]
+            if avail_hard:
+                img_idx = int(avail_hard[int(rng.integers(0, len(avail_hard)))])
+                used_hard.add(img_idx)
             else:
                 low_pool = pools.low_confidence[digit]
                 img_idx = int(low_pool[int(rng.integers(0, len(low_pool)))])

@@ -25,7 +25,7 @@
 ## 2. Generated Data (`data/sudoku_generator.py`)
 - **`solution`**: `9x9` `int64` grid (`1..9`), generated via randomized backtracking with a seeded `np.random.Generator`.
 - **`puzzle`**: `9x9` `int64` grid (`0` for blank, `1..9` for givens), created by removing cells in random order while maintaining a unique solution (`count_solutions(puzzle, limit=2) == 1`).
-- **`mosaic`**: `(9, 9, 28, 28)` `float32` array constructed **after** the NN is trained:
-  - Blank cells (`puzzle == 0`) contain all-zero `28x28` tiles, detected by `is_blank_cell(patch, threshold=0.01)` using mean pixel intensity (`< 0.01`; all non-zero MNIST test digits have mean `>= 0.0281`).
-  - Normal given cells sample from `easy_correct` (MNIST test images correctly classified by the trained NN with confidence `>= 0.90`).
-  - Injected misread cells (`0..4` per puzzle) sample from `hard_misread` (MNIST test images that the trained NN actually misclassifies, sorted by highest probability assigned to the true digit).
+- **`mosaic`**: `(252, 252)` grayscale `float32` image (tiled from `(9, 9, 28, 28)` cells) constructed **after** the NN is trained, with a dedicated generator `--seed` per run:
+  - Blank cells (`puzzle == 0`) contain all-zero `28x28` black tiles, detected by `is_blank_cell(patch, threshold=0.01)` using mean pixel intensity (`< 0.01`; all non-zero MNIST test digits have mean `>= 0.0281`).
+  - Normal given cells sample real MNIST test images from `easy_correct` (images correctly classified by the trained NN with confidence `>= 0.90`).
+  - **Hard-digit injection rule**: To inject `k` misreads (`0..4` per puzzle), choose `k` given cells uniformly at random (using the run's generator seed) and replace each with a real MNIST test image of the **same true digit** from `hard_misread` (images that the trained NN classifies wrongly, without replacement within a puzzle). If `hard_misread` for a digit is exhausted or empty, fall back to `low_confidence` (images of that digit with the highest second-best NN probability / lowest confidence).
