@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from csp.sudoku_csp import count_solutions
 from data.labels import DIGITS, digit_to_index, index_to_digit
 
 
@@ -53,72 +54,6 @@ def generate_full_grid(rng: np.random.Generator) -> np.ndarray:
     return grid
 
 
-def count_solutions_fast(grid: np.ndarray, limit: int = 2) -> int:
-    """Count Sudoku solutions up to `limit` using MRV backtracking."""
-    work = grid.copy()
-    row_mask = [0] * 9
-    col_mask = [0] * 9
-    box_mask = [0] * 9
-    empties: list[tuple[int, int]] = []
-
-    for r in range(9):
-        for c in range(9):
-            val = int(work[r, c])
-            if val == 0:
-                empties.append((r, c))
-            else:
-                bit = 1 << val
-                b = 3 * (r // 3) + (c // 3)
-                if (row_mask[r] & bit) or (col_mask[c] & bit) or (box_mask[b] & bit):
-                    return 0
-                row_mask[r] |= bit
-                col_mask[c] |= bit
-                box_mask[b] |= bit
-
-    all_bits = 0b1111111110  # bits 1..9
-
-    def _solve(remaining: list[tuple[int, int]]) -> int:
-        if not remaining:
-            return 1
-        # Pick empty cell with fewest valid candidates (MRV).
-        best_idx = -1
-        best_avail = 0
-        best_count = 10
-        for idx, (r, c) in enumerate(remaining):
-            b = 3 * (r // 3) + (c // 3)
-            avail = all_bits & ~(row_mask[r] | col_mask[c] | box_mask[b])
-            cnt = avail.bit_count()
-            if cnt == 0:
-                return 0
-            if cnt < best_count:
-                best_count = cnt
-                best_avail = avail
-                best_idx = idx
-                if cnt == 1:
-                    break
-
-        r, c = remaining[best_idx]
-        b = 3 * (r // 3) + (c // 3)
-        next_rem = remaining[:best_idx] + remaining[best_idx + 1 :]
-        total = 0
-        avail = best_avail
-        while avail:
-            lsb = avail & -avail
-            avail ^= lsb
-            row_mask[r] |= lsb
-            col_mask[c] |= lsb
-            box_mask[b] |= lsb
-            total += _solve(next_rem)
-            row_mask[r] ^= lsb
-            col_mask[c] ^= lsb
-            box_mask[b] ^= lsb
-            if total >= limit:
-                return total
-        return total
-
-    return _solve(empties)
-
-
 def generate_puzzle(
     num_givens: int = 30,
     rng: np.random.Generator | None = None,
@@ -143,7 +78,7 @@ def generate_puzzle(
                 break
             backup = puzzle[r, c]
             puzzle[r, c] = 0
-            if count_solutions_fast(puzzle, limit=2) != 1:
+            if count_solutions(puzzle, limit=2) != 1:
                 puzzle[r, c] = backup
             else:
                 givens -= 1

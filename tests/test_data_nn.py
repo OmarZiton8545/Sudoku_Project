@@ -5,12 +5,12 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from csp.sudoku_csp import count_solutions
 from data.labels import DIGITS, digit_to_index, index_to_digit, is_blank_cell
 from data.mnist_loader import load_processed_mnist
 from data.sudoku_generator import (
     build_hard_digit_pools,
     build_mosaic,
-    count_solutions_fast,
     generate_puzzle,
     mosaic_to_2d_image,
 )
@@ -55,7 +55,7 @@ def test_generate_puzzle_unique_solution():
     rng = np.random.default_rng(123)
     puzzle, solution = generate_puzzle(num_givens=30, rng=rng)
     assert int(np.sum(puzzle > 0)) == 30
-    assert count_solutions_fast(puzzle, limit=2) == 1
+    assert count_solutions(puzzle, limit=2) == 1
     assert np.all((puzzle == 0) | (puzzle == solution))
 
 

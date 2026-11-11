@@ -24,7 +24,7 @@
 
 ## 2. Generated Data (`data/sudoku_generator.py`)
 - **`solution`**: `9x9` `int64` grid (`1..9`), generated via randomized backtracking with a seeded `np.random.Generator`.
-- **`puzzle`**: `9x9` `int64` grid (`0` for blank, `1..9` for givens), created by removing cells in random order while maintaining a unique solution (`count_solutions_fast(puzzle, limit=2) == 1`).
+- **`puzzle`**: `9x9` `int64` grid (`0` for blank, `1..9` for givens), created by removing cells in random order while maintaining a unique solution (`count_solutions(puzzle, limit=2) == 1`).
 - **`mosaic`**: `(9, 9, 28, 28)` `float32` array constructed **after** the NN is trained:
   - Blank cells (`puzzle == 0`) contain all-zero `28x28` tiles, detected by `is_blank_cell(patch, threshold=0.01)` using mean pixel intensity (`< 0.01`; all non-zero MNIST test digits have mean `>= 0.0281`).
   - Normal given cells sample from `easy_correct` (MNIST test images correctly classified by the trained NN with confidence `>= 0.90`).
