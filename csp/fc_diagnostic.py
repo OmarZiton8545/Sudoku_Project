@@ -59,17 +59,16 @@ def run_fc_diagnostic(
         "checks": {
             "1_mrv_tie_breaking_differs": True,
             "1_explanation": (
-                "With use_ac3=False, _init_domains leaves all blank cells at domain size 9. "
-                "In plain BT, domains never shrink, so MRV sees size 9 everywhere and always "
-                "picks in row-major order. In BT+FC, assigning a cell shrinks its 20 unassigned "
-                "peers to size 8, so MRV immediately jumps to peers of the first guessed cell "
-                "rather than staying row-major."
+                "Plain BT leaves blank domains at size 9 and picks in row-major order. "
+                "With use_fc=True, domains are initialized by removing given digits from "
+                "peer domains before search, and shrunk dynamically during search, so MRV "
+                "focuses on the most constrained cells."
             ),
             "2_bt_uses_given_domains_while_fc_uses_live": False,
             "2_explanation": (
-                "Neither BT nor BT+FC (with use_ac3=False) prunes the initial givens from blank "
-                "domains upfront. Both start with {1..9} on every blank cell; BT checks givens via "
-                "_is_consistent, while BT+FC updates live domains only from search assignments."
+                "Plain BT uses unpruned {1..9} domains and checks givens via _is_consistent. "
+                "BT+FC initializes domains by pruning givens from peers upfront and maintains "
+                "live domains during search."
             ),
         },
         "results": stats,
@@ -95,3 +94,4 @@ if __name__ == "__main__":
             f"  {name:14s} | avg_backtracks={st['avg_backtracks']:9.2f} | "
             f"avg_assignments={st['avg_assignments']:9.2f} | avg_time={st['avg_time_ms']:6.2f} ms"
         )
+

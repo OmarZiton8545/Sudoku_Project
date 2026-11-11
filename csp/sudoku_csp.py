@@ -189,7 +189,7 @@ class CSPSolver:
             if self._givens_conflict(assigned):
                 return CSPResult(
                     solved=False,
-                    status="no solution",
+                    status="inconsistent",
                     message="no solution: conflicting givens in row, column, or box",
                     solution=None,
                     assignments=0,
@@ -198,6 +198,23 @@ class CSPSolver:
                     time_sec=time.perf_counter() - start,
                     num_solutions=0,
                 )
+            if self.use_fc:
+                # Prune each given's digit from unassigned peers' domains before search.
+                for cell, val in assigned.items():
+                    ok, _, fc_pruned = self._forward_check(domains, assigned, cell, val)
+                    values_pruned += fc_pruned
+                    if not ok:
+                        return CSPResult(
+                            solved=False,
+                            status="inconsistent",
+                            message="no solution: forward checking emptied a domain from givens",
+                            solution=None,
+                            assignments=0,
+                            backtracks=0,
+                            values_pruned=values_pruned,
+                            time_sec=time.perf_counter() - start,
+                            num_solutions=0,
+                        )
 
         solutions_found = 0
         first_solution: np.ndarray | None = None
