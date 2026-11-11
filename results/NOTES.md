@@ -1,0 +1,28 @@
+# Experiment Notes (`eval/run_experiments.py`)
+
+- **Seeds**: `[42, 43, 44, 45, 46]` (5 seeds)
+- **Scope / Speed-Mode Note**:
+  - Each experiment used **`20` puzzles per seed per level** across **`5` seeds** (`100` total puzzles per level per configuration).
+  - Total runtime for the `20`-puzzle/seed suite was **`600.43s` (~10.0 min)**: Exp 1 (`153.60s`) + Exp 2 (`100.34s`) + Exp 3 (`346.49s`).
+  - Scaling Exp 1 + Exp 3 to `100` puzzles/seed (`5x` = `500` puzzles per level) would take `~41.7 min` (exceeding the 20-minute budget, primarily due to `Random-correction` hitting `2.5s` timeouts / `5000`-node limits at `k=3, 4`), so we kept the `20` puzzles/seed × `5` seeds (`100` total puzzles/level) dataset and documented this reduction explicitly here. You can run the `100` puzzles/seed sweep anytime via `.venv\Scripts\python.exe -m eval.run_experiments --exp all --puzzles 100`.
+- **Exp 1 (`UCS` vs `Greedy` vs `A*`)**:
+  - Puzzles per misread level `k in {0, 1, 2, 3, 4}`: `20` per seed (`100` total per `k`)
+  - Givens: `30`
+  - `max_corrections`: `3` for `k <= 3`, `4` for `k = 4` only
+  - Run for both `require_unique=False` and `require_unique=True`
+  - Per-puzzle timeout: `2.5s`, search node limit: `5000`
+  - Timeouts observed: `0` across all `k`, algorithms, and uniqueness settings
+  - Runtime: `153.60s`
+- **Exp 2 (`BT` vs `BT+FC` vs `BT+FC+AC-3`)**:
+  - Puzzles per givens level (`25, 30, 35`): `20` per seed (`100` total per givens level)
+  - Per-puzzle timeout: `2.5s`
+  - Timeouts observed: `2` on `BT` (25 givens), `4` on `BT+FC` (25 givens), `0` on `BT+FC+AC-3` (and `0` at 30/35 givens)
+  - Runtime: `100.34s`
+- **Exp 3 (`NN-guided` vs `No-correction` vs `Random-correction`)**:
+  - Puzzles per misread level `k in {0, 1, 2, 3, 4}`: `20` per seed (`100` total per `k`)
+  - Givens: `30`
+  - `require_unique`: `True`
+  - `max_corrections`: `3` for `k <= 3`, `4` for `k = 4` only
+  - Per-puzzle timeout: `2.5s`, search node limit: `5000`
+  - Timeouts observed: `0` on `NN-guided`, `0` on `No-correction`, `24` on `Random-correction` at `k = 4`
+  - Runtime: `346.49s`
