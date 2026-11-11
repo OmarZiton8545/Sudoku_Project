@@ -25,9 +25,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-> Note: `requirements.txt` pins CPU PyTorch (`torch==2.15.0+cpu`, `torchvision==0.29.2+cpu`). If installing from a clean environment on Windows without the PyTorch CPU index configured, install `torch` and `torchvision` first with:
-> `pip install torch==2.15.0+cpu torchvision==0.29.2+cpu --index-url https://download.pytorch.org/whl/cpu`
-> followed by `pip install -r requirements.txt`.
+> Note: `requirements.txt` pins CPU PyTorch (`torch==2.15.0+cpu`, `torchvision==0.29.2+cpu`) and includes `--extra-index-url https://download.pytorch.org/whl/cpu` so `pip install -r requirements.txt` works directly.
 
 ## Exact Run Commands
 
