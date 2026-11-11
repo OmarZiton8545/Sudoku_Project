@@ -1,0 +1,86 @@
+{
+  "seed": 42,
+  "num_puzzles": 20,
+  "num_givens": 30,
+  "ucs_vs_astar_cost_mismatches": [],
+  "levels": {
+    "k=1": {
+      "ucs_unique_False": {
+        "require_unique": false,
+        "num_puzzles": 20,
+        "recovered": 17,
+        "recovery_rate": 0.85,
+        "avg_nodes_expanded": 2.55,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 3,
+          "b_different_cheaper_fix": 0,
+          "c_budget_or_unreadable": 0
+        }
+      },
+      "ucs_unique_True": {
+        "require_unique": true,
+        "num_puzzles": 20,
+        "recovered": 19,
+        "recovery_rate": 0.95,
+        "avg_nodes_expanded": 2.75,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 1,
+          "b_different_cheaper_fix": 0,
+          "c_budget_or_unreadable": 0
+        }
+      }
+    },
+    "k=2": {
+      "ucs_unique_False": {
+        "require_unique": false,
+        "num_puzzles": 20,
+        "recovered": 13,
+        "recovery_rate": 0.65,
+        "avg_nodes_expanded": 49.75,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 0,
+          "b_different_cheaper_fix": 7,
+          "c_budget_or_unreadable": 0
+        }
+      },
+      "ucs_unique_True": {
+        "require_unique": true,
+        "num_puzzles": 20,
+        "recovered": 14,
+        "recovery_rate": 0.7,
+        "avg_nodes_expanded": 140.4,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 0,
+          "b_different_cheaper_fix": 5,
+          "c_budget_or_unreadable": 1
+        }
+      }
+    },
+    "k=3": {
+      "ucs_unique_False": {
+        "require_unique": false,
+        "num_puzzles": 20,
+        "recovered": 11,
+        "recovery_rate": 0.55,
+        "avg_nodes_expanded": 42.8,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 0,
+          "b_different_cheaper_fix": 9,
+          "c_budget_or_unreadable": 0
+        }
+      },
+      "ucs_unique_True": {
+        "require_unique": true,
+        "num_puzzles": 20,
+        "recovered": 18,
+        "recovery_rate": 0.9,
+        "avg_nodes_expanded": 73.2,
+        "failure_breakdown": {
+          "a_no_conflict_0_corrections": 0,
+          "b_different_cheaper_fix": 2,
+          "c_budget_or_unreadable": 0
+        }
+      }
+    }
+  }
+}
